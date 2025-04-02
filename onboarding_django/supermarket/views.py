@@ -38,3 +38,20 @@ def get_product_stock_user(request, stock):
     products = Product.objects.filter(quantity__gt=stock)
     serialized_products = ProductSerializer(products, many=True)
     return Response(serialized_products.data)
+
+
+@api_view(['GET'])
+# get info purchase
+def get_purchase(request, id):
+    purchases = Purchase.objects.get(id=id)
+    serialized_purchases = PurchaseSerializer(purchases, many=True)
+    return Response(serialized_purchases.data)
+
+
+@api_view(['POST'])
+def add_product(request):
+    product = ProductSerializer(data=request.data)
+    if product.is_valid():
+        product.save()
+        return Response(product.data)
+    return Response(product.errors)
